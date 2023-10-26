@@ -1,0 +1,523 @@
+.screen {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.screen .div {
+  background-color: #ffffff;
+  height: 600px;
+  position: relative;
+  width: 500px;
+}
+
+.screen .text-wrapper {
+  color: #000000;
+  font-family: var(--headline-large-font-family);
+  font-size: var(--headline-large-font-size);
+  font-style: var(--headline-large-font-style);
+  font-weight: var(--headline-large-font-weight);
+  left: 100px;
+  letter-spacing: var(--headline-large-letter-spacing);
+  line-height: var(--headline-large-line-height);
+  position: absolute;
+  top: 63px;
+  white-space: nowrap;
+  width: 179px;
+}
+
+.screen .p {
+  color: #000000;
+  font-family: var(--body-large-font-family);
+  font-size: var(--body-large-font-size);
+  font-style: var(--body-large-font-style);
+  font-weight: var(--body-large-font-weight);
+  left: 100px;
+  letter-spacing: var(--body-large-letter-spacing);
+  line-height: var(--body-large-line-height);
+  position: absolute;
+  top: 124px;
+  width: 254px;
+}
+
+.screen .text-wrapper-2 {
+  color: #000000;
+  font-family: var(--body-medium-font-family);
+  font-size: var(--body-medium-font-size);
+  font-style: var(--body-medium-font-style);
+  font-weight: var(--body-medium-font-weight);
+  left: 107px;
+  letter-spacing: var(--body-medium-letter-spacing);
+  line-height: var(--body-medium-line-height);
+  position: absolute;
+  top: 227px;
+  white-space: nowrap;
+  width: 73px;
+}
+
+.screen .text-wrapper-3 {
+  color: #000000;
+  font-family: var(--body-medium-font-family);
+  font-size: var(--body-medium-font-size);
+  font-style: var(--body-medium-font-style);
+  font-weight: var(--body-medium-font-weight);
+  left: 107px;
+  letter-spacing: var(--body-medium-letter-spacing);
+  line-height: var(--body-medium-line-height);
+  position: absolute;
+  top: 350px;
+  white-space: nowrap;
+  width: 73px;
+}
+
+.screen .button-instance {
+  display: flex !important;
+  left: 271px !important;
+  position: absolute !important;
+  top: 494px !important;
+  width: 125px !important;
+}
+
+.screen .button-instance2 {
+  box-shadow: var(--) !important;
+  display: flex !important;
+  left: 260px !important;
+  position: absolute !important;
+  top: 496px !important;
+  width: 173px !important;
+}
+
+
+.screen .design-component-instance-node {
+  font-family: var(--label-large-font-family) !important;
+  font-size: var(--label-large-font-size) !important;
+  font-style: var(--label-large-font-style) !important;
+  font-weight: var(--label-large-font-weight) !important;
+  letter-spacing: var(--label-large-letter-spacing) !important;
+  line-height: var(--label-large-line-height) !important;
+}
+
+.screen .text-wrapper-4 {
+  color: #000000;
+  font-family: var(--label-large-font-family);
+  font-size: var(--label-large-font-size);
+  font-style: var(--label-large-font-style);
+  font-weight: var(--label-large-font-weight);
+  height: 15px;
+  left: 100px;
+  letter-spacing: var(--label-large-letter-spacing);
+  line-height: var(--label-large-line-height);
+  position: absolute;
+  text-align: center;
+  top: 508px;
+  white-space: nowrap;
+  width: 140px;
+}
+
+.screen .text-wrapper-5 {
+  color: #ff0000;
+  font-family: var(--label-large-font-family);
+  font-size: var(--label-large-font-size);
+  font-style: var(--label-large-font-style);
+  font-weight: var(--label-large-font-weight);
+  height: 15px;
+  left: 100px;
+  letter-spacing: var(--label-large-letter-spacing);
+  line-height: var(--label-large-line-height);
+  position: absolute;
+  text-align: center;
+  top: 440px;
+  white-space: nowrap;
+  width: 140px;
+}
+
+.screen .rectangle {
+  background-color: #d9d9d9;
+  border-radius: 10px;
+  height: 42px;
+  left: 100px;
+  position: absolute;
+  top: 248px;
+  width: 213px;
+}
+
+.screen .rectangle-2 {
+  background-color: #d9d9d9;
+  border-radius: 10px;
+  height: 42px;
+  left: 100px;
+  position: absolute;
+  top: 371px;
+  width: 213px;
+}
+
+/* Button */
+.button {
+  all: unset;
+  align-items: center;
+  border-radius: 100px;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 40px;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.button .state-layer {
+  align-items: center;
+  align-self: stretch;
+  display: flex;
+  flex: 1;
+  flex-grow: 1;
+  gap: 8px;
+  position: relative;
+  width: 100%;
+}
+
+.button .instance-node {
+  height: 18px !important;
+  position: relative !important;
+  width: 18px !important;
+}
+
+.button .label-text {
+  font-family: "Roboto-Medium", Helvetica;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  line-height: 20px;
+  margin-top: -1px;
+  position: relative;
+  text-align: center;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.button.outlined {
+  border: 1px solid;
+}
+
+.button.tonal.hovered {
+  background-color: #e8def8;
+  box-shadow: 0px 1px 3px 1px #00000026, 0px 1px 2px #0000004c;
+}
+
+.button.hovered.elevated {
+  background-color: #f7f2fa;
+  box-shadow: 0px 2px 6px 2px #00000026, 0px 1px 2px #0000004c;
+}
+
+.button.focused.filled {
+  background-color: #6750a4;
+}
+
+.button.enabled.tonal {
+  background-color: #e8def8;
+}
+
+.button.enabled.filled {
+  background-color: #6750a4;
+}
+
+.button.pressed.elevated {
+  background-color: #f7f2fa;
+  box-shadow: 0px 1px 3px 1px #00000026, 0px 1px 2px #0000004c;
+}
+
+.button.pressed.tonal {
+  background-color: #e8def8;
+}
+
+.button.outlined.pressed {
+  border-color: #79747e;
+}
+
+.button.hovered.filled {
+  background-color: #6750a4;
+  box-shadow: 0px 1px 3px 1px #00000026, 0px 1px 2px #0000004c;
+}
+
+.button.outlined.focused {
+  border-color: #6750a4;
+}
+
+.button.outlined.enabled {
+  border-color: #79747e;
+}
+
+.button.enabled.elevated {
+  background-color: #f7f2fa;
+  box-shadow: 0px 1px 3px 1px #00000026, 0px 1px 2px #0000004c;
+}
+
+.button.outlined.disabled {
+  border-color: #1d1b201f;
+}
+
+.button.pressed.filled {
+  background-color: #6750a4;
+}
+
+.button.outlined.hovered {
+  border-color: #79747e;
+}
+
+.button.focused.tonal {
+  background-color: #e8def8;
+}
+
+.button.focused.elevated {
+  background-color: #f7f2fa;
+  box-shadow: 0px 1px 3px 1px #00000026, 0px 1px 2px #0000004c;
+}
+
+.button .state-hovered {
+  justify-content: center;
+}
+
+.button .style-text {
+  justify-content: center;
+}
+
+.button .state-pressed {
+  justify-content: center;
+}
+
+.button .style-filled {
+  justify-content: center;
+}
+
+.button .style-tonal {
+  justify-content: center;
+}
+
+.button .state-enabled {
+  justify-content: center;
+}
+
+.button .state-focused {
+  justify-content: center;
+}
+
+.button .style-tonal.state-hovered {
+  background-color: #1d192b14;
+}
+
+.button .state-hovered.style-elevated {
+  background-color: #6750a414;
+}
+
+.button .show-icon-true.style-filled {
+  padding: 10px 16px 10px 16px;
+}
+
+.button .state-focused.style-filled {
+  background-color: #ffffff1f;
+}
+
+.button .state-pressed.style-elevated {
+  background-color: #6750a41f;
+}
+
+.button .state-pressed.style-tonal {
+  background-color: #1d192b1f;
+}
+
+.button .style-outlined.state-pressed {
+  background-color: #6750a41f;
+}
+
+.button .state-hovered.style-filled {
+  background-color: #ffffff14;
+}
+
+.button .style-outlined.state-focused {
+  background-color: #6750a41f;
+}
+
+.button .state-disabled.style-elevated {
+  background-color: #1d1b201f;
+}
+
+.button .style-tonal.state-disabled {
+  background-color: #1d1b201f;
+}
+
+.button .show-icon-false.style-outlined {
+  padding: 10px 24px;
+}
+
+.button .style-outlined.show-icon-true {
+  padding: 10px 24px 10px 16px;
+}
+
+.button .show-icon-false.style-tonal {
+  padding: 10px 24px;
+}
+
+.button .show-icon-false.style-elevated {
+  padding: 10px 24px;
+}
+
+.button .state-focused.style-text {
+  background-color: #6750a41f;
+}
+
+.button .state-pressed.style-filled {
+  background-color: #ffffff1f;
+}
+
+.button .style-outlined.state-hovered {
+  background-color: #6750a414;
+}
+
+.button .show-icon-true.style-elevated {
+  padding: 10px 16px 10px 16px;
+}
+
+.button .show-icon-true.style-text {
+  padding: 10px 16px 10px 16px;
+}
+
+.button .state-focused.style-tonal {
+  background-color: #1d192b1f;
+}
+
+.button .state-focused.style-elevated {
+  background-color: #6750a41f;
+}
+
+.button .style-text.state-hovered {
+  background-color: #6750a414;
+}
+
+.button .show-icon-true.style-tonal {
+  padding: 10px 16px 10px 16px;
+}
+
+.button .state-disabled.style-filled {
+  background-color: #1d1b201f;
+}
+
+.button .state-pressed.style-text {
+  background-color: #6750a41f;
+}
+
+.button .show-icon-false.style-text {
+  padding: 10px 12px;
+}
+
+.button .state-focused.style-filled.show-icon-true {
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.button .show-icon-true.state-hovered.style-filled {
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.button .state-layer.state-disabled .label-text {
+  color: #1d1b20;
+  opacity: 0.38;
+}
+
+.button .state-layer.style-tonal.state-hovered .label-text {
+  color: #1d192b;
+}
+
+.button .state-layer.state-hovered.style-elevated .label-text {
+  color: #6750a4;
+}
+
+.button .state-layer.state-enabled.style-text .label-text {
+  color: #6750a4;
+}
+
+.button .state-layer.state-focused.style-filled .label-text {
+  color: #ffffff;
+}
+
+.button .state-layer.state-enabled.style-tonal .label-text {
+  color: #1d192b;
+}
+
+.button .state-layer.state-enabled.style-filled .label-text {
+  color: #ffffff;
+}
+
+.button .state-layer.state-pressed.style-elevated .label-text {
+  color: #6750a4;
+}
+
+.button .state-layer.state-pressed.style-tonal .label-text {
+  color: #1d192b;
+}
+
+.button .state-layer.style-outlined.state-pressed .label-text {
+  color: #6750a4;
+}
+
+.button .state-layer.state-hovered.style-filled .label-text {
+  color: #ffffff;
+}
+
+.button .state-layer.style-outlined.state-focused .label-text {
+  color: #6750a4;
+}
+
+.button .state-layer.style-outlined.state-enabled .label-text {
+  color: #6750a4;
+}
+
+.button .state-layer.state-enabled.style-elevated .label-text {
+  color: #6750a4;
+}
+
+.button .state-layer.state-focused.style-text .label-text {
+  color: #6750a4;
+}
+
+.button .state-layer.state-pressed.style-filled .label-text {
+  color: #ffffff;
+}
+
+.button .state-layer.style-outlined.state-hovered .label-text {
+  color: #6750a4;
+}
+
+.button .state-layer.state-focused.style-tonal .label-text {
+  color: #1d192b;
+}
+
+.button .state-layer.state-focused.style-elevated .label-text {
+  color: #6750a4;
+}
+
+.button .state-layer.style-text.state-hovered .label-text {
+  color: #6750a4;
+}
+
+.button .state-layer.state-pressed.style-text .label-text {
+  color: #6750a4;
+}
+
+button {
+  cursor: pointer !important;
+}
+
+/* Input */
+input {
+  border: none;
+  font-size: 16px;
+  padding: 0 10px;
+}
+
+.cursor {
+  cursor: pointer;
+}

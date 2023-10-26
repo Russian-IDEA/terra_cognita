@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+{% block script %}
+    <script type="text/babel">
+        function App() {
+            return <h1>{{ user }}</h1>;
+        }
+
+        const root = document.getElementById('root');
+        let DOMRoot = ReactDOM.createRoot(root);
+        DOMRoot.render(<App />);
+    </script>
+{% endblock %}
