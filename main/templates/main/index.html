@@ -48,8 +48,8 @@
                       style="filled"
                     />
                       {!toRegister && <div className="text-wrapper-4 cursor" onClick={() => onRegisterButtonClick("")}>Регистрация</div>}
-                    <input required name="username" className="rectangle" />
-                    <input required name="password" className="rectangle-2" type="password" />
+                    <input required maxLength="20" name="username" className="rectangle" />
+                    <input required maxLength="20" name="password" className="rectangle-2" type="password" />
                       <input hidden name="toSignUp" type="text" value={toRegister}/>
                       <span className="text-wrapper-5">{error}</span>
                   </form>
