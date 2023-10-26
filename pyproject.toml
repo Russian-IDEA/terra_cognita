@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "terra-cognita"
+version = "0.1.0"
+description = ""
+authors = ["Andrey <andreydem42@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+django = "3.2"
+dj-database-url = "^2.1.0"
+psycopg2-binary = "^2.9.9"
+whitenoise = {version = "6.0", extras = ["brotli"]}
+gunicorn = "^21.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
