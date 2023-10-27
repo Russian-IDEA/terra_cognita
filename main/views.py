@@ -34,6 +34,19 @@ def auth(request):
 
 @login_required(login_url='/auth')
 def home(request):
+    orders = request.user.order_set.order_by('id').reverse()
+    return render(request, "main/index.html", {'user': request.user.username, 'orders': orders,
+                                                 "current_time": datetime.datetime.now()})
+
+
+@login_required(login_url='/auth')
+def add(request):
+    new_id = list(Order.objects.all())[-1].id + 1
+    return render(request, 'main/add.html', {'api_key': os.getenv('API_KEY'), 'new_id': new_id})
+
+
+@login_required(login_url='/auth')
+def post(request):
     if request.method == 'POST':
         name = request.POST['name']
         points = list(map(float, request.POST['points'].split(',')))
@@ -44,15 +57,7 @@ def home(request):
         Order.objects.create(
             user=request.user, name=name, latitude=points[0], longitude=points[1], date=date,
             method=method, resolution=resolution, is_cancelled=calculated_time == -1)
-    orders = Order.objects.all().order_by('id').reverse()
-    return render(request, "main/index.html", {'user': request.user.username, 'orders': orders,
-                                                 "current_time": datetime.datetime.now()})
-
-
-@login_required(login_url='/auth')
-def add(request):
-    new_id = list(Order.objects.all())[-1].id + 1
-    return render(request, 'main/add.html', {'api_key': os.getenv('API_KEY'), 'new_id': new_id})
+    return redirect('/')
 
 
 def logout_page(request):
