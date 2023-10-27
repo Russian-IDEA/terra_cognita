@@ -4,11 +4,6 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/styleguide.css' %}">
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey={{ api_key }}" type="text/javascript"></script>
-    <style>
-        #root, #in-root, form {
-            height: 100%;
-        }
-    </style>
 {% endblock %}
 {% block script %}
     <script type="text/babel">
@@ -48,11 +43,31 @@
             render() {
                 console.log(this.state.points);
                 return (
-                    <div id="in-root">
-                        <form method="post"><CSRFToken />
-                            <input required name="name" placeholder="Название заказа" type="text"/>
-                            <div id="map"></div>
-                            <SubmitButton counter={this.state.points.length}/>
+                    <div>
+                        <header>
+                            <div className="header-container">
+                                <div><img src="{% static 'images/Logo.svg' %}" alt="Logo"/></div>
+                                <div><a href="/logout">Выйти</a></div>
+                            </div>
+                        </header>
+                        <form method="post" action="/profile/"><CSRFToken />
+                            <div className="map-form">
+                                <div className="input-group-order">
+                                    <div className="input-order-name">
+                                        <input id="name" required name="name" defaultValue="" placeholder="Название заказа" type="text"/>
+                                    </div>
+                                    <div className="cross-back cursor" onClick={() => {
+                                            document.getElementById("name").value = '';
+                                        }}>
+                                        <img src="{% static 'images/cross.svg' %}" alt="remove"/>
+                                    </div>
+                                </div>
+                                <div id="map"></div>
+                                <input hidden name="points" type="text" value={this.state.points}/>
+                                <div className="buttons-group">
+                                    <SubmitButton counter={this.state.points.length}/>
+                                </div>
+                            </div>
                         </form>
                     </div>
               );

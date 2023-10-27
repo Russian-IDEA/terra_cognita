@@ -1,3 +1,10 @@
+body {
+  font-family: var(--headline-large-font-family);
+  font-style: var(--headline-large-font-style);
+  letter-spacing: var(--headline-large-letter-spacing);
+  line-height: var(--headline-large-line-height);
+}
+
 .screen {
   background-color: #ffffff;
   display: flex;
@@ -15,13 +22,9 @@
 
 .screen .text-wrapper {
   color: #000000;
-  font-family: var(--headline-large-font-family);
-  font-size: var(--headline-large-font-size);
-  font-style: var(--headline-large-font-style);
-  font-weight: var(--headline-large-font-weight);
   left: 100px;
-  letter-spacing: var(--headline-large-letter-spacing);
-  line-height: var(--headline-large-line-height);
+  font-weight: var(--headline-large-font-weight);
+  font-size: var(--headline-large-font-size);
   position: absolute;
   top: 63px;
   white-space: nowrap;
@@ -575,3 +578,169 @@ input {
 html, body, #map {
   width: 100%; height: 90%; padding: 0; margin: 0;
 }
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 64px;
+  background-color: var(--Gray);
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+header a {
+  text-decoration: none;
+  color: white;
+}
+
+.card {
+  width: 764px;
+  height: 86px;
+  align-self: center;
+  border-radius: 25px;
+  margin-bottom: 10px;
+  display: flex;
+}
+
+.card-process {
+  background: rgba(208, 188, 255, 0.3);
+}
+
+.card-success {
+  background: rgba(70, 136, 150, 0.3);
+}
+
+.card-cancelled {
+  background: rgba(227, 70, 126, 0.3);
+}
+
+.list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 119px;
+}
+
+.header-container {
+  width: 764px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+
+.circle {
+  stroke-width: 8px;
+  height: 57px;
+  padding: 16px;
+}
+
+.circle-process {
+  stroke: rgb(208, 188, 255);
+}
+
+.circle-success {
+  stroke: rgb(70, 136, 150);
+}
+
+.circle-cancelled {
+  stroke: rgb(227, 70, 126);
+}
+
+.order-name {
+  font-size: 22px;
+  margin: 19px 0 0 10px;
+  line-height: 28px;
+}
+
+.order-action {
+  font-size: 14px;
+  font-weight: 400;
+  opacity: 0.5;
+  margin: 5px 0 0 10px;
+  line-height: 20px;
+}
+
+.date {
+  position: absolute;
+  height: 32px;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.1px;
+  opacity: 0.5;
+  display: flex;
+  justify-content: right;
+  width: 650px;
+  line-height: 20px;
+  margin-top: 31px;
+}
+
+.date p {
+  margin: 0;
+}
+
+.line {
+  margin: 12px 0 0 670px;
+  position: absolute;
+}
+
+#map {
+  height: 500px;
+  width: 760px;
+  align-self: center;
+}
+
+.input-order-name {
+  align-self: center;
+  width: 684px;
+  border-radius: 25px;
+  background: #EFEFEF;
+  display: flex;
+  height: 100%;
+  align-content: center;
+  justify-content: center;
+}
+
+.input-order-name input {
+  background: #EFEFEF;
+  outline: none;
+  width: 90%;
+  text-align: center;
+}
+
+.input-order-name input::placeholder {
+  text-align: center;
+}
+
+.input-group-order {
+  display: flex;
+  height: 62px;
+  text-align: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.cross-back {
+  margin-left: 10px;
+  height: 62px;
+  width: 62px;
+  border-radius: 25px;
+  background: #EFEFEF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 100px;
+}
+
+.buttons-group {
+  align-self: center;
+}
+
