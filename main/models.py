@@ -11,6 +11,8 @@ class Order(models.Model):
     y2 = models.FloatField()
     date = models.DateTimeField('Время исполнения')
     is_cancelled = models.BooleanField('Отменён', default=False)
+    method = models.CharField('Метод', max_length=10, default='моно')
+    resolution = models.CharField('Разрешение', max_length=10, default='1 m/px')
 
     def __str__(self):
         return self.name

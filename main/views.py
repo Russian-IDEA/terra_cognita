@@ -38,15 +38,19 @@ def profile(request):
         name = request.POST['name']
         points = list(map(float, request.POST['points'].split(',')))
         date = datetime.datetime.now() + datetime.timedelta(seconds=randint(1_000, 1_000_000))
+        method = request.POST['method']
+        resolution = request.POST['resolution']
         Order.objects.create(
-            user=request.user, name=name, x1=points[0], y1=points[1], x2=points[2], y2=points[3], date=date)
+            user=request.user, name=name, x1=points[0], y1=points[1],
+            x2=points[2], y2=points[3], date=date, method=method, resolution=resolution)
     orders = Order.objects.all().order_by('id').reverse()
     return render(request, "main/profile.html", {'user': request.user.username, 'orders': orders,
                                                  "current_time": datetime.datetime.now()})
 
 
 def add(request):
-    return render(request, 'main/add.html', {'api_key': os.getenv('API_KEY')})
+    new_id = list(Order.objects.all())[-1].id + 1
+    return render(request, 'main/add.html', {'api_key': os.getenv('API_KEY'), 'new_id': new_id})
 
 
 def logout_page(request):

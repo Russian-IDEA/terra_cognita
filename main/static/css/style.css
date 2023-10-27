@@ -741,6 +741,45 @@ header a {
 }
 
 .buttons-group {
+  display: flex;
+  margin-top: 16px;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.buttons-center {
   align-self: center;
+  display: flex;
+  width: 760px;
+}
+
+#make-button {
+  background: #533A94;
+  color: white;
+  outline: none;
+  border: none;
+  margin-left: 220px;
+  margin-right: 0;
+  align-self: normal;
+}
+
+.bottom-button {
+  padding: 11px 0;
+  background: #EFEFEF;
+  border-radius: 25px;
+  align-self: center;
+  text-align: center;
+  width: 121px;
+  margin-right: 19px;
+}
+
+.bottom-button p {
+  padding: 0;
+  margin: 0;
+  line-height: 24px;
+}
+
+.inactive {
+  background: #EFEFEF !important;
 }
 

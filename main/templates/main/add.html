@@ -28,9 +28,51 @@
 
         function SubmitButton({counter}) {
             if (counter !== 4) {
-                return <button disabled type="submit">Создать заказ</button>
+                return <button id="make-button" className="bottom-button inactive" disabled type="submit"><div>Создать заказ</div></button>
             } else {
-                return <button type="submit">Создать заказ</button>
+                return <button id="make-button" className="bottom-button" type="submit"><div>Создать заказ</div></button>
+            }
+        }
+
+        class MethodBtn extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {text: 'моно'};
+            }
+
+            render() {
+                return (
+                    <div className="bottom-button cursor" onClick={() => {
+                        if (this.state.text === 'стерео')
+                            this.setState({text: 'моно'});
+                        else
+                            this.setState({text: 'стерео'});
+                    }}>
+                        <input hidden type="text" name="method" value={this.state.text}/>
+                        <p id="method">{this.state.text}</p>
+                    </div>
+                );
+            }
+        }
+
+        class ResolutionBtn extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {text: '1 m/px'};
+            }
+
+            render() {
+                return (
+                    <div className="bottom-button cursor" onClick={() => {
+                        if (this.state.text === '1 m/px')
+                            this.setState({text: '0,5 m/px'});
+                        else
+                            this.setState({text: '1 m/px'});
+                    }}>
+                        <input hidden type="text" name="resolution" value={this.state.text}/>
+                        <p id="resolution">{this.state.text}</p>
+                    </div>
+                );
             }
         }
 
@@ -41,7 +83,6 @@
               }
 
             render() {
-                console.log(this.state.points);
                 return (
                     <div>
                         <header>
@@ -56,16 +97,23 @@
                                     <div className="input-order-name">
                                         <input id="name" required name="name" defaultValue="" placeholder="Название заказа" type="text"/>
                                     </div>
-                                    <div className="cross-back cursor" onClick={() => {
-                                            document.getElementById("name").value = '';
-                                        }}>
-                                        <img src="{% static 'images/cross.svg' %}" alt="remove"/>
-                                    </div>
+                                    <a href="/profile">
+                                        <div className="cross-back">
+                                            <img src="{% static 'images/cross.svg' %}" alt="remove"/>
+                                        </div>
+                                    </a>
                                 </div>
                                 <div id="map"></div>
                                 <input hidden name="points" type="text" value={this.state.points}/>
-                                <div className="buttons-group">
-                                    <SubmitButton counter={this.state.points.length}/>
+                                <div className="buttons-center">
+                                    <div className="buttons-group">
+                                        <div className="bottom-button">
+                                            <p>{{ new_id }}</p>
+                                        </div>
+                                        <MethodBtn/>
+                                        <ResolutionBtn/>
+                                        <SubmitButton counter={this.state.points.length}/>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -75,23 +123,33 @@
 
             componentDidMount() {
 
-                let addPoint = (x, y) => {
-                    let array = this.state.points;
-                    array.push(x, y);
-                    this.setState((state) => ({
-                        points: array
-                    }));
+                let addPoint = (myMap, x, y) => {
+                    if (this.state.points.length < 4) {
+                        myMap.geoObjects
+                            .add(new ymaps.Placemark([x, y], {}, {
+                                preset: 'islands#redIcon'
+                            }));
+                        let array = this.state.points;
+                        array.push(x, y);
+                        this.setState({points: array});
+                        if (this.state.points.length === 4) {
+                            myMap.geoObjects
+                                .add(new ymaps.Placemark([this.state.points[0], this.state.points[3]], {}, {
+                                    preset: 'islands#redIcon'
+                                }));
+                            myMap.geoObjects
+                                .add(new ymaps.Placemark([this.state.points[2], this.state.points[1]], {}, {
+                                    preset: 'islands#redIcon'
+                                }));
+                        }
+                    }
                 }
 
                 function onClick(myMap, e) {
                     let coords = e.get('coords');
                     let x = coords[0].toPrecision(6);
                     let y = coords[1].toPrecision(6);
-                    myMap.geoObjects
-                        .add(new ymaps.Placemark([x, y], {}, {
-                            preset: 'islands#redIcon'
-                        }));
-                    addPoint(x, y);
+                    addPoint(myMap, x, y);
                 }
 
                 ymaps.ready(() => {
