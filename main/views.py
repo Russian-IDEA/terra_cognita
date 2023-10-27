@@ -6,11 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.db.utils import IntegrityError
 import os
 import datetime
-from random import randint
+from .mathutils import calculate_time
 
 
 @ensure_csrf_cookie
-def home(request):
+def auth(request):
     error_code = 0
     if request.method == 'POST':
         username = request.POST['username']
@@ -20,34 +20,36 @@ def home(request):
             try:
                 user = User.objects.create_user(username=username, password=password)
                 login(request, user)
-                return redirect('/profile')
+                return redirect('/')
             except IntegrityError:
                 error_code = 2
         else:
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('/profile')
+                return redirect('/')
             error_code = 1
-    return render(request, "main/index.html", {'error_code': error_code})
+    return render(request, "main/auth.html", {'error_code': error_code})
 
 
-@login_required(login_url='/')
-def profile(request):
+@login_required(login_url='/auth')
+def home(request):
     if request.method == 'POST':
         name = request.POST['name']
         points = list(map(float, request.POST['points'].split(',')))
-        date = datetime.datetime.now() + datetime.timedelta(seconds=randint(1_000, 1_000_000))
         method = request.POST['method']
         resolution = request.POST['resolution']
+        calculated_time = calculate_time(points[0], points[1])
+        date = datetime.datetime.now() + datetime.timedelta(minutes=calculated_time)
         Order.objects.create(
-            user=request.user, name=name, x1=points[0], y1=points[1],
-            x2=points[2], y2=points[3], date=date, method=method, resolution=resolution)
+            user=request.user, name=name, latitude=points[0], longitude=points[1], date=date,
+            method=method, resolution=resolution, is_cancelled=calculated_time == -1)
     orders = Order.objects.all().order_by('id').reverse()
-    return render(request, "main/profile.html", {'user': request.user.username, 'orders': orders,
+    return render(request, "main/index.html", {'user': request.user.username, 'orders': orders,
                                                  "current_time": datetime.datetime.now()})
 
 
+@login_required(login_url='/auth')
 def add(request):
     new_id = list(Order.objects.all())[-1].id + 1
     return render(request, 'main/add.html', {'api_key': os.getenv('API_KEY'), 'new_id': new_id})

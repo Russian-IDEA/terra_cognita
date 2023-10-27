@@ -1,8 +1,6 @@
 {% extends 'main/base.html' %}
 {% load static %}
-{% block style %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/styleguide.css' %}">
+{% block extra_scripts %}
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey={{ api_key }}" type="text/javascript"></script>
 {% endblock %}
 {% block script %}
@@ -26,11 +24,11 @@
             );
         };
 
-        function SubmitButton({counter}) {
-            if (counter !== 4) {
-                return <button id="make-button" className="bottom-button inactive" disabled type="submit"><div>Создать заказ</div></button>
-            } else {
+        function SubmitButton({success}) {
+            if (success) {
                 return <button id="make-button" className="bottom-button" type="submit"><div>Создать заказ</div></button>
+            } else {
+                return <button id="make-button" className="bottom-button inactive" disabled type="submit"><div>Создать заказ</div></button>
             }
         }
 
@@ -86,18 +84,18 @@
                 return (
                     <div>
                         <header>
-                            <div className="header-container">
-                                <div><img src="{% static 'images/Logo.svg' %}" alt="Logo"/></div>
-                                <div><a href="/logout">Выйти</a></div>
-                            </div>
+                          <div className="header-container">
+                              <div><a href="/"><img className="header-mobile" src="{% static 'images/Logo.svg' %}" alt="Logo"/></a></div>
+                              <div><a className="header-mobile" href="/logout">Выйти</a></div>
+                          </div>
                         </header>
-                        <form method="post" action="/profile/"><CSRFToken />
+                        <form method="post" action="/"><CSRFToken />
                             <div className="map-form">
                                 <div className="input-group-order">
                                     <div className="input-order-name">
                                         <input id="name" required name="name" defaultValue="" placeholder="Название заказа" type="text"/>
                                     </div>
-                                    <a href="/profile">
+                                    <a href="/">
                                         <div className="cross-back">
                                             <img src="{% static 'images/cross.svg' %}" alt="remove"/>
                                         </div>
@@ -112,7 +110,7 @@
                                         </div>
                                         <MethodBtn/>
                                         <ResolutionBtn/>
-                                        <SubmitButton counter={this.state.points.length}/>
+                                        <SubmitButton success={this.state.points.length === 2}/>
                                     </div>
                                 </div>
                             </div>
@@ -122,34 +120,22 @@
             }
 
             componentDidMount() {
+                let placemark;
 
-                let addPoint = (myMap, x, y) => {
-                    if (this.state.points.length < 4) {
-                        myMap.geoObjects
-                            .add(new ymaps.Placemark([x, y], {}, {
-                                preset: 'islands#redIcon'
-                            }));
-                        let array = this.state.points;
-                        array.push(x, y);
-                        this.setState({points: array});
-                        if (this.state.points.length === 4) {
-                            myMap.geoObjects
-                                .add(new ymaps.Placemark([this.state.points[0], this.state.points[3]], {}, {
-                                    preset: 'islands#redIcon'
-                                }));
-                            myMap.geoObjects
-                                .add(new ymaps.Placemark([this.state.points[2], this.state.points[1]], {}, {
-                                    preset: 'islands#redIcon'
-                                }));
-                        }
-                    }
+                let addPoint = (myMap, latitude, longitude) => {
+                    myMap.geoObjects.remove(placemark);
+                    placemark = new ymaps.Placemark([latitude, longitude], {}, {
+                        preset: 'islands#redIcon'
+                    });
+                    myMap.geoObjects.add(placemark);
+                    this.setState({points: [latitude, longitude]});
                 }
 
                 function onClick(myMap, e) {
                     let coords = e.get('coords');
-                    let x = coords[0].toPrecision(6);
-                    let y = coords[1].toPrecision(6);
-                    addPoint(myMap, x, y);
+                    let latitude = coords[0].toPrecision(6);
+                    let longitude = coords[1].toPrecision(6);
+                    addPoint(myMap, latitude, longitude);
                 }
 
                 ymaps.ready(() => {

@@ -5,10 +5,8 @@ from django.contrib.auth.models import User
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     name = models.CharField('Название', max_length=20)
-    x1 = models.FloatField()
-    y1 = models.FloatField()
-    x2 = models.FloatField()
-    y2 = models.FloatField()
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     date = models.DateTimeField('Время исполнения')
     is_cancelled = models.BooleanField('Отменён', default=False)
     method = models.CharField('Метод', max_length=10, default='моно')
@@ -16,3 +14,12 @@ class Order(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SatelliteModel(models.Model):
+    s = models.CharField(max_length=100)
+    t = models.CharField(max_length=100)
+    view_angle = models.FloatField()
+
+    def __str__(self):
+        return str(self.id)

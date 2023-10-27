@@ -1,0 +1,142 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block script %}
+    <script type="text/babel">
+        function getCSRFToken() {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith('csrftoken=')) {
+              return cookie.substring('csrftoken='.length, cookie.length);
+            }
+          }
+          return null;
+        }
+
+        const csrftoken = getCSRFToken();
+
+        const CSRFToken = () => {
+            return (
+                <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
+            );
+        };
+
+        function onEnterButtonClick(error) {
+            DOMRoot.render(<Form toRegister={false} error={error}/>);
+        }
+
+        function onRegisterButtonClick(error) {
+            DOMRoot.render(<Form toRegister={true} error={error}/>);
+        }
+
+        function Form({toRegister, error}) {
+            return (
+                <div className="screen">
+                  <form className="div" method="post"><CSRFToken />
+                    <div className="text-wrapper">{ toRegister ? "Регистрация" : "Вход"}</div>
+                    <p className="p">Для { toRegister ? "регистрации придумайте" : "входа в личный кабинет введите"} логин и пароль.</p>
+                    <div className="text-wrapper-2">Логин</div>
+                    <div className="text-wrapper-3">Пароль</div>
+                    <Button
+                      className={ toRegister ? "button-instance2" : "button-instance"}
+                      labelText={ toRegister ? "Зарегистрироваться" : "Войти"}
+                      labelTextClassName="design-component-instance-node"
+                      showIcon={false}
+                      style="filled"
+                    />
+                      {!toRegister && <div className="text-wrapper-4 cursor" onClick={() => onRegisterButtonClick("")}>Регистрация</div>}
+                    <input required maxLength="20" minLength="3" name="username" className="rectangle" />
+                    <input required maxLength="20" minLength="3" name="password" className="rectangle-2" type="password" />
+                      <input hidden name="toSignUp" type="text" value={toRegister}/>
+                      <span className="text-wrapper-5">{error}</span>
+                  </form>
+                </div>
+              );
+        }
+
+        const Button = ({ labelText = "Label", style, stateProp, showIcon, className }) => {
+          const [state, dispatch] = React.useReducer(reducer, {
+            style: style || "filled",
+            state: stateProp || "enabled",
+            showIcon: showIcon || false,
+          });
+
+          return (
+            <button
+                type="submit"
+              className={`button ${state.style} ${state.state} ${className}`}
+              onMouseEnter={() => {
+                dispatch("mouse_enter");
+              }}
+              onMouseLeave={() => {
+                dispatch("mouse_leave");
+              }}
+            >
+              <div className={`state-layer state-${state.state} style-${state.style} show-icon-${state.showIcon}`}>
+                {((state.showIcon && state.state === "disabled" && state.style === "elevated") ||
+                  (state.showIcon && state.state === "disabled" && state.style === "text") ||
+                  (state.showIcon && state.state === "disabled" && state.style === "tonal") ||
+                  (state.showIcon && state.state === "enabled") ||
+                  (state.showIcon && state.state === "focused") ||
+                  (state.showIcon && state.state === "hovered") ||
+                  (state.showIcon && state.state === "pressed")) && (
+                  <Add24Px
+                    className="instance-node"
+                    color={
+                      state.state === "disabled"
+                        ? "#1D1B20"
+                        : (state.state === "enabled" && state.style === "tonal") ||
+                          (state.state === "focused" && state.style === "tonal") ||
+                          (state.state === "hovered" && state.style === "tonal") ||
+                          (state.state === "pressed" && state.style === "tonal")
+                        ? "#1D192B"
+                        : state.style === "filled"
+                        ? "white"
+                        : "#6750A4"
+                    }
+                    opacity={state.state === "disabled" ? "0.38" : undefined}
+                  />
+                )}
+
+                {state.showIcon && state.state === "disabled" && ["filled", "outlined"].includes(state.style) && (
+                  <Icon className="instance-node" />
+                )}
+
+                <div className="label-text">{labelText}</div>
+              </div>
+            </button>
+          );
+        };
+
+        function reducer(state, action) {
+          switch (action) {
+            case "mouse_enter":
+              return {
+                ...state,
+                state: "hovered",
+              };
+
+            case "mouse_leave":
+              return {
+                ...state,
+                state: "enabled",
+              };
+          }
+
+          return state;
+        }
+
+        const root = document.getElementById('root');
+        let DOMRoot = ReactDOM.createRoot(root);
+        {% if error_code == 1 %}
+            onEnterButtonClick('Логин и пароль не совпадают');
+            {% else %}
+            {% if error_code == 2 %}
+                onRegisterButtonClick('Пользователь уже существует');
+                {% else %}
+                onEnterButtonClick('');
+            {% endif %}
+        {% endif %}
+
+    </script>
+{% endblock %}

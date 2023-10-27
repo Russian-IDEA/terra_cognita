@@ -783,3 +783,72 @@ header a {
   background: #EFEFEF !important;
 }
 
+#outer-plus {
+  bottom: 0;
+  right: 0;
+  position: fixed;
+}
+
+#inner-plus {
+  position: absolute;
+  bottom: 50px;
+  right: 60px;
+}
+
+@media screen and (max-width: 768px) {
+  .card {
+    width: 100%;
+  }
+
+  .date {
+    width: 90%;
+    margin-top: 50px;
+  }
+
+  .line {
+    margin: 12px 0 0 95%;
+  }
+
+  .header-mobile {
+    margin: 0 20px;
+  }
+
+  #map {
+    width: 100%;
+  }
+
+  .buttons-center {
+    width: 100%;
+  }
+
+  #make-button {
+    margin-left: 0;
+  }
+
+  .input-order-name input {
+    width: 80%;
+  }
+
+  #inner-plus {
+    bottom: 0;
+    right: 0;
+  }
+
+  .screen .div {
+    width: 100vw;
+  }
+
+  .screen .text-wrapper-4 {
+    width: 0;
+  }
+
+  .screen .button-instance {
+    left: 250px !important;
+  }
+
+  .screen .button-instance2 {
+    left: 200px !important;
+  }
+}
+
+
