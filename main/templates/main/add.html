@@ -1,0 +1,99 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styleguide.css' %}">
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey={{ api_key }}" type="text/javascript"></script>
+    <style>
+        #root, #in-root, form {
+            height: 100%;
+        }
+    </style>
+{% endblock %}
+{% block script %}
+    <script type="text/babel">
+        function getCSRFToken() {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith('csrftoken=')) {
+                  return cookie.substring('csrftoken='.length, cookie.length);
+                }
+            }
+            return null;
+        }
+
+        const csrftoken = getCSRFToken();
+
+        const CSRFToken = () => {
+            return (
+                <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
+            );
+        };
+
+        function SubmitButton({counter}) {
+            if (counter !== 4) {
+                return <button disabled type="submit">Создать заказ</button>
+            } else {
+                return <button type="submit">Создать заказ</button>
+            }
+        }
+
+        class Screen extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {points: []};
+              }
+
+            render() {
+                console.log(this.state.points);
+                return (
+                    <div id="in-root">
+                        <form method="post"><CSRFToken />
+                            <input required name="name" placeholder="Название заказа" type="text"/>
+                            <div id="map"></div>
+                            <SubmitButton counter={this.state.points.length}/>
+                        </form>
+                    </div>
+              );
+            }
+
+            componentDidMount() {
+
+                let addPoint = (x, y) => {
+                    let array = this.state.points;
+                    array.push(x, y);
+                    this.setState((state) => ({
+                        points: array
+                    }));
+                }
+
+                function onClick(myMap, e) {
+                    let coords = e.get('coords');
+                    let x = coords[0].toPrecision(6);
+                    let y = coords[1].toPrecision(6);
+                    myMap.geoObjects
+                        .add(new ymaps.Placemark([x, y], {}, {
+                            preset: 'islands#redIcon'
+                        }));
+                    addPoint(x, y);
+                }
+
+                ymaps.ready(() => {
+                   let myMap = new ymaps.Map("map", {
+                        center: [55.76, 37.64],
+                        zoom: 5
+                    }, {
+                        searchControlProvider: 'yandex#search'
+                    });
+
+                    myMap.events.add('click', (e) => onClick(myMap, e));
+               });
+            }
+        }
+
+        const root = document.getElementById('root');
+        let DOMRoot = ReactDOM.createRoot(root);
+        DOMRoot.render(<Screen />);
+    </script>
+{% endblock %}

@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
 from django.db.utils import IntegrityError
+import os
 
 
 @ensure_csrf_cookie
@@ -32,6 +33,10 @@ def home(request):
 @login_required(login_url='/')
 def profile(request):
     return render(request, "main/profile.html", {'user': request.user.username})
+
+
+def add(request):
+    return render(request, 'main/add.html', {'api_key': os.getenv('API_KEY')})
 
 
 def logout_page(request):

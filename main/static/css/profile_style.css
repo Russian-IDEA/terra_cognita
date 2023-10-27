@@ -1,0 +1,11 @@
+#outer-plus {
+  width: 95vw;
+  height: 95vh;
+  position: relative;
+}
+
+#inner-plus {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
