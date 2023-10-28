@@ -1,7 +1,7 @@
 from json import JSONDecodeError
 
 from django.shortcuts import render, redirect
-from .models import User, Order
+from .models import User, Order, SatelliteModel
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
@@ -84,6 +84,15 @@ def download(request, order_id):
         response['Content-Disposition'] = f'attachment; filename="{photo.file.name}"'
         return response
     return HttpResponseForbidden()
+
+
+def get_satellites_json(request):
+    data = list(map(lambda x: {
+        'x': x.s,
+        't': x.t,
+        'view_angle': x.view_angle
+    }, SatelliteModel.objects.all()))
+    return HttpResponse(json.dumps({'result': data}), content_type="application/json")
 
 
 def logout_page(request):

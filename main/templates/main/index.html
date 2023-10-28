@@ -59,7 +59,7 @@
                                 <p className="order-action">Отклонено</p>
                             </div>
                             <div className="date">
-                                <p>{{ order.date.date|date:'d.m.Y' }}</p>
+                                <p>{{ order.date|date:'d.m.Y H:i' }}</p>
                             </div>
                             <div className="line">
                                 <img src="{% static 'images/Line 1.png' %}" alt="line"/>
@@ -76,7 +76,7 @@
                                     <p className="order-action">Готово</p>
                                 </div>
                                 <div className="date">
-                                    <p>{{ order.date.date|date:'d.m.Y' }}</p>
+                                    <p>{{ order.date|date:'d.m.Y H:i' }}</p>
                                 </div>
                                 <div className="line">
                                     <img src="{% static 'images/Line 1.png' %}" alt="line"/>
@@ -92,7 +92,7 @@
                                     <p className="order-action">Ожидает съёмки</p>
                                 </div>
                                 <div className="date">
-                                    <p>{{ order.date.date|date:'d.m.Y' }}</p>
+                                    <p>{{ order.date|date:'d.m.Y H:i' }}</p>
                                 </div>
                                 <div className="line">
                                     <img src="{% static 'images/Line 1.png' %}" alt="line"/>
