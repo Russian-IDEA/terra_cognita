@@ -1,16 +1,44 @@
 {% extends 'main/base.html' %}
+{% block extra_scripts %}
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey={{ api_key }}" type="text/javascript"></script>
+{% endblock %}
 {% load static %}
 {% block script %}
     <script type="text/babel">
-        const Screen = () => {
+        function getCSRFToken() {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith('csrftoken=')) {
+                  return cookie.substring('csrftoken='.length, cookie.length);
+                }
+            }
+            return null;
+        }
+
+        const csrftoken = getCSRFToken();
+
+        const CSRFToken = () => {
+            return (
+                <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
+            );
+        };
+
+        const Header = () => {
+            return (
+                <header>
+                    <div className="header-container">
+                        <div><a href="/"><img className="header-mobile" src="{% static 'images/Logo.svg' %}" alt="Logo"/></a></div>
+                        <div><a className="header-mobile" href="/logout">Выйти</a></div>
+                    </div>
+                </header>
+            );
+        }
+
+        const HomeScreen = () => {
           return (
               <div>
-                  <header>
-                      <div className="header-container">
-                          <div><a href="/"><img className="header-mobile" src="{% static 'images/Logo.svg' %}" alt="Logo"/></a></div>
-                          <div><a className="header-mobile" href="/logout">Выйти</a></div>
-                      </div>
-                  </header>
+                  <Header/>
                   <Cards/>
                   <Plus/>
               </div>
@@ -80,15 +108,146 @@
         const Plus = () => {
           return (
               <div id="outer-plus">
-                  <a href="/add">
+                  <a onClick={() => renderAddScreen()}>
                       <img id="inner-plus" className="cursor" src="{% static 'images/Subtract.svg' %}" width="88" alt="plus"/>
                   </a>
                 </div>
           );
         };
 
+        function SubmitButton({success}) {
+            if (success) {
+                return <button id="make-button" className="bottom-button" type="submit"><div>Создать заказ</div></button>
+            } else {
+                return <button id="make-button" className="bottom-button inactive" disabled type="submit"><div>Создать заказ</div></button>
+            }
+        }
+
+        class MethodBtn extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {text: 'моно'};
+            }
+
+            render() {
+                return (
+                    <div className="bottom-button cursor" onClick={() => {
+                        if (this.state.text === 'стерео')
+                            this.setState({text: 'моно'});
+                        else
+                            this.setState({text: 'стерео'});
+                    }}>
+                        <input hidden type="text" name="method" value={this.state.text}/>
+                        <p id="method">{this.state.text}</p>
+                    </div>
+                );
+            }
+        }
+
+        class ResolutionBtn extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {text: '1 m/px'};
+            }
+
+            render() {
+                return (
+                    <div className="bottom-button cursor" onClick={() => {
+                        if (this.state.text === '1 m/px')
+                            this.setState({text: '0,5 m/px'});
+                        else
+                            this.setState({text: '1 m/px'});
+                    }}>
+                        <input hidden type="text" name="resolution" value={this.state.text}/>
+                        <p id="resolution">{this.state.text}</p>
+                    </div>
+                );
+            }
+        }
+
+        class AddScreen extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {points: []};
+              }
+
+            render() {
+                return (
+                    <div>
+                        <Header/>
+                        <form method="post" action="/post/"><CSRFToken />
+                            <div className="map-form">
+                                <div className="input-group-order">
+                                    <div className="input-order-name">
+                                        <input id="name" required name="name" defaultValue="" placeholder="Название заказа" type="text"/>
+                                    </div>
+                                    <a onClick={() => renderHomeScreen()}>
+                                        <div className="cross-back cursor">
+                                            <img src="{% static 'images/cross.svg' %}" alt="remove"/>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div id="map"></div>
+                                <input hidden name="points" type="text" value={this.state.points}/>
+                                <div className="buttons-center">
+                                    <div className="buttons-group">
+                                        <div className="bottom-button">
+                                            <p>{{ new_id }}</p>
+                                        </div>
+                                        <MethodBtn/>
+                                        <ResolutionBtn/>
+                                        <SubmitButton success={this.state.points.length === 8}/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+              );
+            }
+
+            componentDidMount() {
+
+                let addPoint = (myMap, latitude, longitude) => {
+                    let pointsList = this.state.points;
+                    if (pointsList.length < 8) {
+                        myMap.geoObjects.add(new ymaps.Placemark([latitude, longitude], {}, {
+                            preset: 'islands#redIcon'
+                        }));
+                        pointsList.push(latitude, longitude);
+                        this.setState({points: pointsList});
+                    }
+                }
+
+                function onClick(myMap, e) {
+                    let coords = e.get('coords');
+                    let latitude = coords[0].toPrecision(6);
+                    let longitude = coords[1].toPrecision(6);
+                    addPoint(myMap, latitude, longitude);
+                }
+
+                ymaps.ready(() => {
+                   let myMap = new ymaps.Map("map", {
+                        center: [55.76, 37.64],
+                        zoom: 5
+                    }, {
+                        searchControlProvider: 'yandex#search'
+                    });
+
+                    myMap.events.add('click', (e) => onClick(myMap, e));
+               });
+            }
+        }
+
+        function renderAddScreen() {
+            DOMRoot.render(<AddScreen />);
+        }
+
+        function renderHomeScreen() {
+            DOMRoot.render(<HomeScreen />);
+        }
+
         const root = document.getElementById('root');
         let DOMRoot = ReactDOM.createRoot(root);
-        DOMRoot.render(<Screen />);
+        renderHomeScreen();
     </script>
 {% endblock %}

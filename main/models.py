@@ -13,8 +13,7 @@ class Photo(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     name = models.CharField('Название', max_length=20)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    points = models.JSONField('Координаты')
     date = models.DateTimeField('Время исполнения')
     is_cancelled = models.BooleanField('Отменён', default=False)
     method = models.CharField('Метод', max_length=10, default='моно')

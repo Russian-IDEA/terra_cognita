@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import User, Order, Photo
+from .models import User, Order
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
@@ -7,7 +7,7 @@ from django.db.utils import IntegrityError
 import os
 import datetime
 from .mathutils import calculate_time
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 
 
 @ensure_csrf_cookie
@@ -36,30 +36,29 @@ def auth(request):
 @login_required(login_url='/auth')
 def home(request):
     orders = request.user.order_set.order_by('id').reverse()
-    return render(request, "main/index.html", {'user': request.user.username, 'orders': orders,
-                                                 "current_time": datetime.datetime.now()})
-
-
-@login_required(login_url='/auth')
-def add(request):
     try:
         new_id = list(Order.objects.all())[-1].id + 1
     except IndexError:
         new_id = 1
-    return render(request, 'main/add.html', {'api_key': os.getenv('API_KEY'), 'new_id': new_id})
+    return render(request, "main/index.html", {'user': request.user.username, 'orders': orders,
+                                                 "current_time": datetime.datetime.now(),
+                                               'api_key': os.getenv('API_KEY'), 'new_id': new_id})
 
 
 @login_required(login_url='/auth')
 def post(request):
     if request.method == 'POST':
         name = request.POST['name']
-        points = list(map(float, request.POST['points'].split(',')))
+        coordinates = list(map(float, request.POST['points'].split(',')))
         method = request.POST['method']
         resolution = request.POST['resolution']
-        calculated_time = calculate_time(points[0], points[1])
+        points = []
+        for i in range(1, len(coordinates), 2):
+            points.append((coordinates[i-1], coordinates[i]))
+        calculated_time = calculate_time(points)
         date = datetime.datetime.now() + datetime.timedelta(minutes=calculated_time)
         Order.objects.create(
-            user=request.user, name=name, latitude=points[0], longitude=points[1], date=date,
+            user=request.user, name=name, points=points, date=date,
             method=method, resolution=resolution, is_cancelled=calculated_time == -1)
     return redirect('/')
 
@@ -72,6 +71,7 @@ def download(request, order_id):
         response = HttpResponse(photo.file, content_type='application/force-download')
         response['Content-Disposition'] = f'attachment; filename="{photo.file.name}"'
         return response
+    return HttpResponseForbidden()
 
 
 def logout_page(request):

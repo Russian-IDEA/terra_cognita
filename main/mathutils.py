@@ -32,6 +32,11 @@ class Point:
         self.y = R * math.cos(lati) * math.sin(long)
         self.z = R * math.sin(lati)
 
+    def set_coord(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+
 
 class SatPoint:
     def __init__(self, x, y, z):
@@ -44,10 +49,22 @@ def distFromTo(x1, y1, z1, x2, y2, z2):
     return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2)
 
 
-def calculate_time(latitude, longitude):
+def calculate_time(geoPoints):
     satArr = list(map(lambda x: Satellite(x.id, x.s, x.t, x.view_angle), SatelliteModel.objects.all()))
-    points = [Point(latitude, longitude)]
 
+    points = []
+    for geoPoint in geoPoints:
+        points.append(Point(geoPoint[0], geoPoint[1]))
+
+    # генерируем доп поинты, чтобы отсканить всю область.
+    for i in range(4):
+        for j in range(i + 1, 4):
+            x = (points[i].x + points[j].x) / 2
+            y = (points[i].y + points[j].y) / 2
+            z = (points[i].z + points[j].z) / 2
+            P = Point(0, 0)
+            P.set_coord(x, y, z)
+            points.append(P)
 
     dists = []
     for id, sat in enumerate(satArr):
@@ -73,9 +90,12 @@ def calculate_time(latitude, longitude):
                         dists[id][ip][0] = distToPoint
                         dists[id][ip][1] = SatPoint(r[0], r[1], r[2])
                         dists[id][ip][2] = i
-    minTime = 1e20
+    minTime = []
+    for i in range(len(points)):
+        minTime.append(1e20)
     for id, sat in enumerate(dists):
-        for _, point, time in sat:
+        for ip, satData in enumerate(sat):
+            dist, point, time = satData
             if point != 0:
-                minTime = min(minTime, time)
-    return -1 if minTime == 1e20 else minTime
+                minTime[ip] = min(minTime[ip], time)
+    return -1 if max(minTime) == 1e20 else max(minTime)
