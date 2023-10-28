@@ -629,6 +629,7 @@ header a {
   justify-content: space-between;
   align-items: center;
   align-content: center;
+  z-index: 3001;
 }
 
 .circle {
@@ -690,6 +691,7 @@ header a {
   height: 500px;
   width: 760px;
   align-self: center;
+  z-index: 0;
 }
 
 .input-order-name {
@@ -744,13 +746,13 @@ header a {
   display: flex;
   margin-top: 16px;
   width: 100%;
-  margin-bottom: 40px;
 }
 
 .buttons-center {
   align-self: center;
   display: flex;
   width: 760px;
+  margin: 10px 0;
 }
 
 #make-button {
@@ -798,6 +800,20 @@ header a {
 a {
   text-decoration: none;
   color: black;
+}
+
+#textarea {
+  width: 100%;
+  height: 99%;
+  resize: none;
+}
+
+#textarea-outer {
+  height: 500px;
+  width: 760px;
+  align-self: center;
+  resize: none;
+  display: none;
 }
 
 @media screen and (max-width: 768px) {
@@ -854,6 +870,8 @@ a {
   .screen .button-instance2 {
     left: 200px !important;
   }
+
+  #textarea-outer {
+    width: 93%;
+  }
 }
-
-

@@ -1,3 +1,5 @@
+from json import JSONDecodeError
+
 from django.shortcuts import render, redirect
 from .models import User, Order
 from django.contrib.auth import authenticate, login, logout
@@ -8,6 +10,7 @@ import os
 import datetime
 from .mathutils import calculate
 from django.http import HttpResponse, HttpResponseForbidden
+import json
 
 
 @ensure_csrf_cookie
@@ -41,25 +44,34 @@ def home(request):
     except IndexError:
         new_id = 1
     return render(request, "main/index.html", {'user': request.user.username, 'orders': orders,
-                                                 "current_time": datetime.datetime.now(),
+                                               "current_time": datetime.datetime.now(),
                                                'api_key': os.getenv('API_KEY'), 'new_id': new_id})
 
 
 @login_required(login_url='/auth')
 def post(request):
     if request.method == 'POST':
-        name = request.POST['name']
-        coordinates = list(map(float, request.POST['points'].split(',')))
-        method = request.POST['method']
-        resolution = request.POST['resolution']
-        points = []
-        for i in range(1, len(coordinates), 2):
-            points.append((coordinates[i-1], coordinates[i]))
-        calculated_time = calculate(points)
-        date = datetime.datetime.now() + datetime.timedelta(minutes=calculated_time)
-        Order.objects.create(
-            user=request.user, name=name, points=points, date=date,
-            method=method, resolution=resolution, is_cancelled=calculated_time == -1)
+        try:
+            is_map = request.POST['is_map']
+            if is_map == 'true':
+                coordinates = list(map(float, request.POST['points'].split(',')))
+                points = []
+                for i in range(1, len(coordinates), 2):
+                    points.append((coordinates[i - 1], coordinates[i]))
+            else:
+                points = json.loads(request.POST['textarea'])['coordinates'][0]
+            name = request.POST['name']
+            method = request.POST['method']
+            resolution = request.POST['resolution']
+            calculated_time = calculate(points)
+            date = datetime.datetime.now() + datetime.timedelta(minutes=calculated_time)
+            Order.objects.create(
+                user=request.user, name=name, points=points, date=date,
+                method=method, resolution=resolution, is_cancelled=calculated_time == -1)
+        except JSONDecodeError:
+            Order.objects.create(
+                user=request.user, name='Неверный формат geoJSON', points='none', date=datetime.datetime.now(),
+                method='none', resolution='none', is_cancelled=True)
     return redirect('/')
 
 

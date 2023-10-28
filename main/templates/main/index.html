@@ -165,11 +165,36 @@
             }
         }
 
+         class InputMethodBtn extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {text: 'geoJSON'};
+            }
+
+            render() {
+                return (
+                    <div onClick={() => {
+                        if (this.state.text === 'geoJSON') {
+                            this.setState({text: 'Карты'});
+                            document.getElementById('map').style.display = 'none';
+                            document.getElementById('textarea-outer').style.display = 'block';
+                        } else {
+                            this.setState({text: 'geoJSON'});
+                            document.getElementById('textarea-outer').style.display = 'none';
+                            document.getElementById('map').style.display = 'block';
+                        }
+                    }}>
+                        <p id="input-method">{this.state.text}</p>
+                    </div>
+                );
+            }
+        }
+
         class AddScreen extends React.Component {
             constructor(props) {
                 super(props);
-                this.state = {points: []};
-              }
+                this.state = {points: [], is_map: true};
+            }
 
             render() {
                 return (
@@ -188,7 +213,11 @@
                                     </a>
                                 </div>
                                 <div id="map"></div>
+                                <div id="textarea-outer">
+                                    <textarea name="textarea" cols="30" rows="10" id="textarea" placeholder="Введите geoJSON"></textarea>
+                                </div>
                                 <input hidden name="points" type="text" value={this.state.points}/>
+                                <input hidden name="is_map" type="text" value={this.state.is_map}/>
                                 <div className="buttons-center">
                                     <div className="buttons-group">
                                         <div className="bottom-button">
@@ -196,7 +225,14 @@
                                         </div>
                                         <MethodBtn/>
                                         <ResolutionBtn/>
-                                        <SubmitButton success={this.state.points.length === 8}/>
+                                        <SubmitButton success={this.state.points.length === 8 || !this.state.is_map}/>
+                                    </div>
+                                </div>
+                                <div className="buttons-center">
+                                    <div className="bottom-button cursor" onClick={() => {
+                                        this.setState({is_map: !this.state.is_map});
+                                    }}>
+                                        <InputMethodBtn/>
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +242,6 @@
             }
 
             componentDidMount() {
-
                 let addPoint = (myMap, latitude, longitude) => {
                     let pointsList = this.state.points;
                     if (pointsList.length < 8) {
