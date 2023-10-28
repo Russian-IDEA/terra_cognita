@@ -13,6 +13,11 @@ from django.http import HttpResponse, HttpResponseForbidden
 import json
 
 
+def now():
+    offset = datetime.timezone(datetime.timedelta(hours=3))
+    return datetime.datetime.now()
+
+
 @ensure_csrf_cookie
 def auth(request):
     error_code = 0
@@ -44,7 +49,7 @@ def home(request):
     except IndexError:
         new_id = 1
     return render(request, "main/index.html", {'user': request.user.username, 'orders': orders,
-                                               "current_time": datetime.datetime.now(),
+                                               "current_time": now(),
                                                'api_key': os.getenv('API_KEY'), 'new_id': new_id})
 
 
@@ -64,13 +69,13 @@ def post(request):
             method = request.POST['method']
             resolution = request.POST['resolution']
             calculated_time = calculate(points)
-            date = datetime.datetime.now() + datetime.timedelta(minutes=calculated_time)
+            date = now() + datetime.timedelta(minutes=calculated_time)
             Order.objects.create(
                 user=request.user, name=name, points=points, date=date,
                 method=method, resolution=resolution, is_cancelled=calculated_time == -1)
         except JSONDecodeError:
             Order.objects.create(
-                user=request.user, name='Неверный формат geoJSON', points='none', date=datetime.datetime.now(),
+                user=request.user, name='Неверный формат geoJSON', points='none', date=now(),
                 method='none', resolution='none', is_cancelled=True)
     return redirect('/')
 
