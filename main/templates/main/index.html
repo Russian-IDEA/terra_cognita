@@ -218,6 +218,13 @@
                     }
                 }
 
+                let removePoint = () => {
+                    let pointsList = this.state.points;
+                    pointsList.pop();
+                    pointsList.pop();
+                    this.setState({points: pointsList});
+                }
+
                 function onClick(myMap, e) {
                     let coords = e.get('coords');
                     let latitude = coords[0].toPrecision(6);
@@ -234,6 +241,11 @@
                     });
 
                     myMap.events.add('click', (e) => onClick(myMap, e));
+                    myMap.geoObjects.events.add('click', function (e) {
+                        var object = e.get('target');
+                        myMap.geoObjects.remove(object);
+                        removePoint();
+                    });
                });
             }
         }
