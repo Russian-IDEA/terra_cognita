@@ -38,8 +38,8 @@
                             </div>
                         </div>
                     {% else %}
-                        {% if order.date.timestamp < current_time.timestamp %}
-                            <div className="card card-success">
+                        {% if order.photo %}
+                            <a className="card card-success" href="download/{{ order.id }}/">
                                 <div className="circle circle-success">
                                     <img src="{% static 'images/Ellipse green.svg' %}" alt="circle"/>
                                 </div>
@@ -53,7 +53,7 @@
                                 <div className="line">
                                     <img src="{% static 'images/Line 1.png' %}" alt="line"/>
                                 </div>
-                            </div>
+                            </a>
                         {% else %}
                             <div className="card card-process">
                                 <div className="circle circle-process">

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import User, Order
+from .models import User, Order, Photo
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
@@ -7,6 +7,7 @@ from django.db.utils import IntegrityError
 import os
 import datetime
 from .mathutils import calculate_time
+from django.http import HttpResponse
 
 
 @ensure_csrf_cookie
@@ -41,7 +42,10 @@ def home(request):
 
 @login_required(login_url='/auth')
 def add(request):
-    new_id = list(Order.objects.all())[-1].id + 1
+    try:
+        new_id = list(Order.objects.all())[-1].id + 1
+    except IndexError:
+        new_id = 1
     return render(request, 'main/add.html', {'api_key': os.getenv('API_KEY'), 'new_id': new_id})
 
 
@@ -58,6 +62,16 @@ def post(request):
             user=request.user, name=name, latitude=points[0], longitude=points[1], date=date,
             method=method, resolution=resolution, is_cancelled=calculated_time == -1)
     return redirect('/')
+
+
+@login_required(login_url='/auth')
+def download(request, order_id):
+    order = Order.objects.get(id=order_id)
+    if order.user == request.user:
+        photo = order.photo
+        response = HttpResponse(photo.file, content_type='application/force-download')
+        response['Content-Disposition'] = f'attachment; filename="{photo.file.name}"'
+        return response
 
 
 def logout_page(request):

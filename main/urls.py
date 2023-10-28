@@ -8,4 +8,5 @@ urlpatterns = [
     path('logout/', views.logout_page),
     path('add/', views.add),
     path('post/', views.post),
+    path('download/<int:order_id>/', views.download),
 ]

@@ -795,6 +795,11 @@ header a {
   right: 60px;
 }
 
+a {
+  text-decoration: none;
+  color: black;
+}
+
 @media screen and (max-width: 768px) {
   .card {
     width: 100%;
