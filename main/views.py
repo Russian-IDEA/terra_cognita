@@ -15,7 +15,7 @@ import json
 
 def now():
     offset = datetime.timezone(datetime.timedelta(hours=3))
-    return datetime.datetime.now()
+    return datetime.datetime.now(offset)
 
 
 @ensure_csrf_cookie
