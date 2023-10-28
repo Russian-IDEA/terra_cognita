@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.utils import IntegrityError
 import os
 import datetime
-from .mathutils import calculate_time
+from .mathutils import calculate
 from django.http import HttpResponse, HttpResponseForbidden
 
 
@@ -55,7 +55,7 @@ def post(request):
         points = []
         for i in range(1, len(coordinates), 2):
             points.append((coordinates[i-1], coordinates[i]))
-        calculated_time = calculate_time(points)
+        calculated_time = calculate(points)
         date = datetime.datetime.now() + datetime.timedelta(minutes=calculated_time)
         Order.objects.create(
             user=request.user, name=name, points=points, date=date,

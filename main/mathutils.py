@@ -1,5 +1,5 @@
 import math
-from .models import SatelliteModel
+from .models import SatelliteModel, BadZoneModel
 from sgp4.api import jday, Satrec
 
 R = 6370
@@ -45,16 +45,43 @@ class SatPoint:
         self.z = z
 
 
+class BadZone:
+    def __init__(self, lati, long, radius):
+        lati = math.radians(lati)
+        long = math.radians(long)
+        self.x = R * math.cos(lati) * math.cos(long)
+        self.y = R * math.cos(lati) * math.sin(long)
+        self.z = R * math.sin(lati)
+        self.radius = radius
+
+    def isInside(self, point):
+        return (self.x - point.x) ** 2 + (self.y - point.y) ** 2 + (self.z - point.z) <= self.radius ** 2
+
+
 def distFromTo(x1, y1, z1, x2, y2, z2):
     return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2)
 
 
-def calculate_time(geoPoints):
-    satArr = list(map(lambda x: Satellite(x.id, x.s, x.t, x.view_angle), SatelliteModel.objects.all()))
-
+def calculate(geoPoints):
+    geoBadZones = list(map(lambda x: (x.latitude, x.longitude, x.radius), BadZoneModel.objects.all()))
     points = []
     for geoPoint in geoPoints:
         points.append(Point(geoPoint[0], geoPoint[1]))
+
+    badZones = []
+    for badZone in geoBadZones:
+        badZones.append(BadZone(badZone[0], badZone[1], badZone[2]))
+
+    for point in points:
+        for badZone in badZones:
+            if (badZone.isInside(point)):
+                return -1
+
+    return calculate_time(points)
+
+
+def calculate_time(points):
+    satArr = list(map(lambda x: Satellite(x.id, x.s, x.t, x.view_angle), SatelliteModel.objects.all()))
 
     # генерируем доп поинты, чтобы отсканить всю область.
     for i in range(4):

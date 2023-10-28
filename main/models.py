@@ -31,3 +31,12 @@ class SatelliteModel(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+
+class BadZoneModel(models.Model):
+    latitude = models.FloatField('Широта')
+    longitude = models.FloatField('Долгота')
+    radius = models.FloatField('Радиус')
+
+    def __str__(self):
+        return str(self.id)
