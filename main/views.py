@@ -11,11 +11,11 @@ import datetime
 from .mathutils import calculate
 from django.http import HttpResponse, HttpResponseForbidden
 import json
+import pytz
 
 
 def now():
-    offset = datetime.timezone(datetime.timedelta(hours=3))
-    return datetime.datetime.now(offset)
+    return datetime.datetime.now(pytz.timezone('Europe/Moscow'))
 
 
 @ensure_csrf_cookie
